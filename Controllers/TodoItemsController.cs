@@ -11,47 +11,47 @@ namespace todoonboard_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BoardController : ControllerBase
+    public class TodoItemsController : ControllerBase
     {
         private readonly Context _context;
 
-        public BoardController(Context context)
+        public TodoItemsController(Context context)
         {
             _context = context;
         }
 
-        // GET: api/Board
+        // GET: api/TodoItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Board>>> GetBoards()
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            return await _context.Boards.ToListAsync();
+            return await _context.TodoItems.ToListAsync();
         }
 
-        // GET: api/Board/5
+        // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Board>> GetBoard(int id)
+        public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
         {
-            var board = await _context.Boards.FindAsync(id);
+            var todoItem = await _context.TodoItems.FindAsync(id);
 
-            if (board == null)
+            if (todoItem == null)
             {
                 return NotFound();
             }
 
-            return board;
+            return todoItem;
         }
 
-        // PUT: api/Board/5
+        // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBoard(int id, Board board)
+        public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
         {
-            if (id != board.Id)
+            if (id != todoItem.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(board).State = EntityState.Modified;
+            _context.Entry(todoItem).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace todoonboard_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BoardExists(id))
+                if (!TodoItemExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace todoonboard_api.Controllers
             return NoContent();
         }
 
-        // POST: api/Board
+        // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Board>> PostBoard(Board board)
+        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
         {
-            _context.Boards.Add(board);
+            _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBoard", new { id = board.Id }, board);
+            return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
         }
 
-        // DELETE: api/Board/5
+        // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBoard(int id)
+        public async Task<IActionResult> DeleteTodoItem(int id)
         {
-            var board = await _context.Boards.FindAsync(id);
-            if (board == null)
+            var todoItem = await _context.TodoItems.FindAsync(id);
+            if (todoItem == null)
             {
                 return NotFound();
             }
 
-            _context.Boards.Remove(board);
+            _context.TodoItems.Remove(todoItem);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool BoardExists(int id)
+        private bool TodoItemExists(int id)
         {
-            return _context.Boards.Any(e => e.Id == id);
+            return _context.TodoItems.Any(e => e.Id == id);
         }
     }
 }

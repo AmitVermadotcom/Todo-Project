@@ -1,6 +1,5 @@
-using System.Collections.Generic;
 public class Board
 {
+    public int Id {get; set;}
     public string name { get; set; }
-    public List<TodoItem> todos { get; set; }
 }
