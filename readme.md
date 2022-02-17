@@ -6,15 +6,25 @@ Simple Todos on Board API The assignment involves the creation of a Todo on diff
 We want to create RESTful APIs for a simple Todo management application. The APIs will perform CRUD operation for Todos and Boards. Todos are organized in boards, on every board there can be multiple Todos. A Todo contains a title (str), done (bool), a created (datetime) and updated (datetime) timestamp. A board has a name (str).
 
 Via a REST API it must be possible to:
-- List all boards
-- Add a new board 
-- Change a board's title 
-- Remove a board 
-- List all Todos on a board 
-- List only uncompleted Todos 
-- Add a Todo to a board 
-- Change a Todo's title or status 
-- Delete a Todo 
+<!-- - List all boards  -->
+<!-- - Add a new board  -->
+<!-- - Change a board's title  -->
+API - https://localhost:5001/api/board/3
+{
+    "id": 3,
+    "name": "new board"
+}
+
+<!-- - Remove a board  -->
+<!-- - List all Todos on a board  -->
+
+<!-- - List only uncompleted Todos  -->
+https://localhost:5001/api/todoitems/allincompletetodos
+
+
+<!-- - Add a Todo to a board  -->
+<!-- - Change a Todo's title or status  -->
+<!-- - Delete a Todo  -->
 
 User management and authentication is a plus. The data have to be persisted in SQL Server using EF Core.
 

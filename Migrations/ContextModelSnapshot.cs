@@ -41,6 +41,9 @@ namespace todoonboard_api.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int>("board_id")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("created")
                         .HasColumnType("datetime2");
 

@@ -10,7 +10,7 @@ using todoonboard_api.Models;
 namespace todoonboard_api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220217062237_InitialCreate")]
+    [Migration("20220217070103_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace todoonboard_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<int>("board_id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("created")
                         .HasColumnType("datetime2");

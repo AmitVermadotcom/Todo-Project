@@ -29,7 +29,8 @@ namespace todoonboard_api.Migrations
                     title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDone = table.Column<bool>(type: "bit", nullable: false),
                     created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    board_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -5,4 +5,5 @@ public class TodoItem{
     public bool isDone{get; set;}
     public DateTime created {get; set;}
     public DateTime updated {get; set;}
+    public int board_id {get; set;} 
 }
