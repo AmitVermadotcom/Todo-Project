@@ -10,6 +10,7 @@ using todoonboard_api.Models;
 namespace todoonboard_api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
@@ -64,26 +65,16 @@ namespace todoonboard_api.Controllers
             {
                 return BadRequest();
             }
+            var item = await _context.TodoItems.FirstOrDefaultAsync(item => item.Id == id);
+            if(item == null) return BadRequest();
+            item.title = todoItem.title == null ? item.title : todoItem.title;
+            item.updated = DateTime.UtcNow;
+            item.isDone = todoItem.isDone == null ? item.isDone : todoItem.isDone;
+            item.board_id = todoItem.board_id == null ? item.board_id : todoItem.board_id;
 
-            _context.Entry(todoItem).State = EntityState.Modified;
+            _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TodoItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(item);
         }
 
         // POST: api/TodoItems
@@ -91,6 +82,10 @@ namespace todoonboard_api.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
         {
+
+            todoItem.created = DateTime.UtcNow;
+            todoItem.updated = DateTime.UtcNow;
+
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 

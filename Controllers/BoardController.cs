@@ -9,6 +9,7 @@ using todoonboard_api.Models;
 namespace todoonboard_api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class BoardController : ControllerBase
     {
