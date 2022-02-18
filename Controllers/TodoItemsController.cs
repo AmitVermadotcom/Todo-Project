@@ -45,7 +45,7 @@ namespace todoonboard_api.Controllers
         [HttpGet("allTodosInBoard/{id}")]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemsInBoard(int id)
         {
-            var todoItem = _context.TodoItems.Where(r => r.board_id == id);
+            var todoItem = _context.TodoItems.Where(r => r.board.Id == id);
 
             if (todoItem == null)
             {
@@ -82,8 +82,8 @@ namespace todoonboard_api.Controllers
             item.title = todoItem.title == null ? item.title : todoItem.title;
             item.updated = DateTime.UtcNow;
             item.isDone = todoItem.isDone;
-            item.board_id = todoItem.board_id == 0 ? item.board_id : todoItem.board_id;
-            _context.SaveChangesAsync();
+            // item.board_id = todoItem.board_id == 0 ? item.board_id : todoItem.board_id;
+            await _context.SaveChangesAsync();
             return Ok(item);
         }
 
@@ -119,14 +119,15 @@ namespace todoonboard_api.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
         {
-
+            var board = _context.Boards.Find(todoItem.board.Id);
+            todoItem.board = board;
             todoItem.created = DateTime.UtcNow;
             todoItem.updated = DateTime.UtcNow;
 
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
+            return Ok(CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem).Value);
         }
 
         // DELETE: api/TodoItems/5

@@ -10,7 +10,7 @@ using todoonboard_api.Models;
 namespace todoonboard_api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220217070103_InitialCreate")]
+    [Migration("20220218122712_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace todoonboard_api.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("board_id")
+                    b.Property<int?>("boardId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("created")
@@ -60,7 +60,42 @@ namespace todoonboard_api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("boardId");
+
                     b.ToTable("TodoItems");
+                });
+
+            modelBuilder.Entity("todoonboard_api.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TodoItem", b =>
+                {
+                    b.HasOne("Board", "board")
+                        .WithMany()
+                        .HasForeignKey("boardId");
+
+                    b.Navigation("board");
                 });
 #pragma warning restore 612, 618
         }

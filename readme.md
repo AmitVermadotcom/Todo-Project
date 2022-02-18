@@ -8,28 +8,36 @@ We want to create RESTful APIs for a simple Todo management application. The API
 Via a REST API it must be possible to:
 <!-- - List all boards  -->
 API - https://localhost:5001/api/board
+Method - GET
 
 
 <!-- - Add a new board  -->
 API - https://localhost:5001/api/board
+Method - POST
+Body: 
 {
-    "name": value
+    "name": {name Of Board}
 }
 
 
 <!-- - Change a board's title  -->
 API - https://localhost:5001/api/board/{boardId}
+Method - PUT
+Body
 {
     "id": {boardId},
-    "name": "new board"
+    "name": "{new name}"
 }
 
 <!-- - Remove a board  -->
 API - https://localhost:5001/api/board/{boardId}
+Method - DELETE
 
 
 <!-- - List all Todos on a board  -->
 API - https://localhost:5001/api/todoitems/allTodosInBoard/{boardId}
+Method - GET
+
 
 
 <!-- - List only uncompleted Todos  -->

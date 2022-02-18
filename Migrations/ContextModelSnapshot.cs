@@ -41,7 +41,7 @@ namespace todoonboard_api.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("board_id")
+                    b.Property<int?>("boardId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("created")
@@ -57,6 +57,8 @@ namespace todoonboard_api.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("boardId");
 
                     b.ToTable("TodoItems");
                 });
@@ -83,6 +85,15 @@ namespace todoonboard_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TodoItem", b =>
+                {
+                    b.HasOne("Board", "board")
+                        .WithMany()
+                        .HasForeignKey("boardId");
+
+                    b.Navigation("board");
                 });
 #pragma warning restore 612, 618
         }
