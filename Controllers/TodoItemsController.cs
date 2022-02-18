@@ -27,10 +27,23 @@ namespace todoonboard_api.Controllers
         {
             return await _context.TodoItems.ToListAsync();
         }
-
-        // GET: api/TodoItems/5
+        // GET: api/Board/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItem(int id)
+        public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
+        {
+            var todoitem = await _context.TodoItems.FindAsync(id);
+
+            if (todoitem == null)
+            {
+                return NotFound();
+            }
+
+            return todoitem;
+        }
+
+        // GET: api/TodoItems/allTodosInBoard/{boardId}
+        [HttpGet("allTodosInBoard/{id}")]
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemsInBoard(int id)
         {
             var todoItem = _context.TodoItems.Where(r => r.board_id == id);
 
@@ -38,11 +51,10 @@ namespace todoonboard_api.Controllers
             {
                 return NotFound();
             }
-
             return await todoItem.ToListAsync();
         }
 
-        // GET: api/TodoItems/5
+        // GET: api/TodoItems/allIncompleteTodos
         [HttpGet("allIncompleteTodos")]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetIncompletedItems()
         {
@@ -56,8 +68,26 @@ namespace todoonboard_api.Controllers
             return await todoItem.ToListAsync();
         }
 
-        // PUT: api/TodoItems/5
+        // PATCH: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchTodoItem(int id, TodoItem todoItem)
+        {
+            if (id != todoItem.Id)
+            {
+                return BadRequest();
+            }
+            var item = await _context.TodoItems.FirstOrDefaultAsync(item => item.Id == id);
+            if (item == null) return BadRequest();
+            item.title = todoItem.title == null ? item.title : todoItem.title;
+            item.updated = DateTime.UtcNow;
+            item.isDone = todoItem.isDone;
+            item.board_id = todoItem.board_id == 0 ? item.board_id : todoItem.board_id;
+            _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
+        // PUT: api/TodoItems/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
         {
@@ -65,18 +95,25 @@ namespace todoonboard_api.Controllers
             {
                 return BadRequest();
             }
-            var item = await _context.TodoItems.FirstOrDefaultAsync(item => item.Id == id);
-            if(item == null) return BadRequest();
-            item.title = todoItem.title == null ? item.title : todoItem.title;
-            item.updated = DateTime.UtcNow;
-            item.isDone = todoItem.isDone == null ? item.isDone : todoItem.isDone;
-            item.board_id = todoItem.board_id == null ? item.board_id : todoItem.board_id;
+            _context.Entry(todoItem).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TodoItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
 
-            _context.SaveChangesAsync();
-
-            return Ok(item);
+            }
+            return NoContent();
         }
-
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

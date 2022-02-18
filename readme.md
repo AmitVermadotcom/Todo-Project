@@ -7,24 +7,45 @@ We want to create RESTful APIs for a simple Todo management application. The API
 
 Via a REST API it must be possible to:
 <!-- - List all boards  -->
+API - https://localhost:5001/api/board
+
+
 <!-- - Add a new board  -->
-<!-- - Change a board's title  -->
-API - https://localhost:5001/api/board/3
+API - https://localhost:5001/api/board
 {
-    "id": 3,
+    "name": value
+}
+
+
+<!-- - Change a board's title  -->
+API - https://localhost:5001/api/board/{boardId}
+{
+    "id": {boardId},
     "name": "new board"
 }
 
 <!-- - Remove a board  -->
+API - https://localhost:5001/api/board/{boardId}
+
+
 <!-- - List all Todos on a board  -->
+API - https://localhost:5001/api/todoitems/allTodosInBoard/{boardId}
+
 
 <!-- - List only uncompleted Todos  -->
-https://localhost:5001/api/todoitems/allincompletetodos
+API - https://localhost:5001/api/todoitems/allincompletetodos
 
 
 <!-- - Add a Todo to a board  -->
+API - https://localhost:5001/api/todoitems
+
 <!-- - Change a Todo's title or status  -->
+API - https://localhost:5001/api/todoitems/{todoId}
+** on patch request isDone will set to false
+so, Please send isDone if it is true
+
 <!-- - Delete a Todo  -->
+API - https://localhost:5001/api/todoitems/{todoId}
 
 User management and authentication is a plus. The data have to be persisted in SQL Server using EF Core.
 
